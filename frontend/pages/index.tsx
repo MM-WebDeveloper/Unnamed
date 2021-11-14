@@ -1,7 +1,12 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import React from 'react';
+import Footer from '../components/Footer';
 
 export default function Home() {
-  return <div>Home Page</div>;
+  return (
+    <>
+      <div>Home Page</div>
+      <div className={'waves'} />
+      <Footer />
+    </>
+  );
 }
