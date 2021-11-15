@@ -42,13 +42,14 @@ const register: React.FC<registerProps> = ({}) => {
               setPassword(e.target.value);
             }}
           />
-          <FontAwesomeIcon
-            className={styles.password_btn}
-            icon={faEye}
-            size="2x"
-            onClick={() => setRevealPassword(!revealPassword)}
-            title="Show password"
-          />
+          <span title="Show password">
+            <FontAwesomeIcon
+              className={styles.password_btn}
+              icon={faEye}
+              size="2x"
+              onClick={() => setRevealPassword(!revealPassword)}
+            />
+          </span>
         </div>
         <button className={'form__btn'} type="submit">
           Register
