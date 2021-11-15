@@ -64,6 +64,13 @@ a {
   width: 10rem;
 }
 
+.form_show_password_btn {
+  color: blue;
+  cursor: pointer;
+  position: absolute;
+  margin-top: 5px;
+  margin-left: 5px;
+}
 /* Global Aesthetic CSS */
 .waves {
   background: blue;

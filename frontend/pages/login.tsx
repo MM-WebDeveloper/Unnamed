@@ -1,3 +1,5 @@
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import Footer from '../components/Footer';
 
@@ -6,13 +8,15 @@ interface loginProps {}
 const login: React.FC<loginProps> = ({}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
 
-  const onSubmit = () => {
+  const onSubmitHandler = () => {
     console.log('happened');
   };
+
   return (
     <div>
-      <form className={'form'} onSubmit={onSubmit}>
+      <form className={'form'} onSubmit={onSubmitHandler}>
         <div>
           <label htmlFor="email" />
           <input
@@ -29,12 +33,22 @@ const login: React.FC<loginProps> = ({}) => {
           <input
             className={'form__input'}
             value={password}
-            type="password"
+            type={showPassword ? 'password' : 'text'}
             placeholder="password"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
+          {password ? (
+            <span title="Show password">
+              <FontAwesomeIcon
+                className="form_show_password_btn"
+                icon={faEye}
+                size="2x"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            </span>
+          ) : null}
         </div>
         <button className={'form__btn'} type="submit">
           Login
