@@ -1,4 +1,4 @@
-import { GraphQLServer } from 'graphql-yoga';
+import { GraphQLServer, Options } from 'graphql-yoga';
 import 'reflect-metadata';
 import { buildTypeDefsAndResolvers } from 'type-graphql';
 import { UserResolver } from './resolvers/UserResolver';
@@ -19,10 +19,11 @@ const run = async () => {
     resolvers: [UserResolver],
   });
 
-  const options = {
+  const options: Options = {
     port: PORT,
     endpoint: '/graphql',
     playground: '/playground',
+    cors: { origin: 'http://localhost:3000', credentials: true },
   };
 
   const server = new GraphQLServer({ typeDefs, resolvers });
