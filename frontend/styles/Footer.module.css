@@ -9,10 +9,14 @@
   font-weight: bold;
   color: var(--secondary-color);
   display: flex;
-  justify-content: flex-end;
+}
+
+.footer p {
+  align-self: flex-end;
+  margin: 0px auto;
+  font-size: 1.2rem;
 }
 
 .footer a {
   align-self: flex-end;
-  margin: 0;
 }

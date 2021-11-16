@@ -9,9 +9,14 @@ interface FooterProps {}
 const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <div className={styles['footer']}>
+      <p>&copy; 2021 Unnamed</p>
       <Link href="https://github.com/MM-WebDeveloper">
-        <a target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon={faGithub} size="2x" /> MM-WebDeveloper
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          title="MM-WebDeveloper GitHub"
+        >
+          <FontAwesomeIcon icon={faGithub} size="2x" />
         </a>
       </Link>
     </div>
