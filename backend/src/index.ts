@@ -1,12 +1,12 @@
 import { GraphQLServer, Options } from 'graphql-yoga';
 import 'reflect-metadata';
 import { buildTypeDefsAndResolvers } from 'type-graphql';
-import { UserResolver } from './resolvers/UserResolver';
 import mongoose from 'mongoose';
 import 'dotenv/config';
+import { UserResolver } from './resolvers/user_resolver';
 
 const run = async () => {
-  const PORT = process.env.PORT || 4000;
+  const PORT = process.env.PORT || 4001;
 
   await mongoose
     .connect(process.env.MONGO_DB_URI!)

@@ -2,18 +2,17 @@ import { getModelForClass, prop } from '@typegoose/typegoose';
 import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
-class User {
+export class User {
   @Field()
-  @prop()
-  public name: string;
+  @prop({ required: true })
+  public email: string;
 
-  @Field()
-  @prop()
-  public age: number;
+  @prop({ required: true })
+  public password: string;
 
-  constructor(name: string, age: number) {
-    this.name = name;
-    this.age = age;
+  constructor(email: string, password: string) {
+    this.email = email;
+    this.password = password;
   }
 }
 
