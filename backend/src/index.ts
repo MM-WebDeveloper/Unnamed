@@ -6,7 +6,7 @@ import 'dotenv/config';
 import { UserResolver } from './resolvers/user_resolver';
 
 const run = async () => {
-  const PORT = process.env.PORT || 4001;
+  const PORT = process.env.PORT || 4000;
 
   await mongoose
     .connect(process.env.MONGO_DB_URI!)

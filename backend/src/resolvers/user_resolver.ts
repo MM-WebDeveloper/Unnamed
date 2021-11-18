@@ -6,7 +6,6 @@ import {
   Query,
   Resolver,
 } from 'type-graphql';
-
 import bcrypt from 'bcryptjs';
 import { PasswordValidator, EmailValidator } from '../helpers/validators';
 import { User, UserModel } from '../entities/user';

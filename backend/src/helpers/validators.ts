@@ -1,9 +1,9 @@
 export const PasswordValidator = (password: string) => {
   /* 
-  One special character
   One uppercase letter
   One lowercase letter
   One digit
+  One special character
   8 characters minimum
   */
 
