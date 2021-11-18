@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import Footer from '../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { useRegisterMutation } from '../generated/graphql';
+import { BackendError } from '../generated/graphql';
 
 interface registerProps {}
 
@@ -9,11 +12,23 @@ const register: React.FC<registerProps> = ({}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [error, setError] = useState<BackendError>();
+  const [updateRegisterResult, register] = useRegisterMutation();
 
-  const onSubmitHandler = (e: React.FormEvent) => {
+  const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log(email, password);
+    try {
+      const { data } = await register({ email, password });
+      const api_error = data?.register.error;
+
+      if (api_error) {
+        console.log(api_error);
+        setError(api_error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -41,20 +56,15 @@ const register: React.FC<registerProps> = ({}) => {
               setPassword(e.target.value);
             }}
           />
-          {password ? (
-            <span title="Show password">
-              <FontAwesomeIcon
-                className="form_show_password_btn"
-                icon={faEye}
-                size="2x"
-                onClick={() => setShowPassword(!showPassword)}
-              />
-            </span>
-          ) : null}
         </div>
         <button className={'form__btn'} type="submit">
           Register
         </button>
+        {error ? (
+          <div className={'form_error_message'}>
+            <p>{error.message}</p>
+          </div>
+        ) : null}
       </form>
       <div className={'waves'} />
       <Footer />

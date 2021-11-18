@@ -71,12 +71,22 @@ a {
   margin-top: 5px;
   margin-left: 5px;
 }
+
+.form_error_message {
+  display: flex;
+  color: red;
+  margin-top: 5px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: pre-wrap;
+}
+
 /* Global Aesthetic CSS */
 .waves {
   background: blue;
   height: 500px;
   width: 100%;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   transform: rotate(180deg);
   clip-path: polygon(
