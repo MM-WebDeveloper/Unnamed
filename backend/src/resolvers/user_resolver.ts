@@ -11,7 +11,7 @@ import { PasswordValidator, EmailValidator } from '../helpers/validators';
 import { User, UserModel } from '../entities/user';
 
 @ObjectType()
-class Error {
+class BackendError {
   @Field()
   field: string;
   @Field()
@@ -27,8 +27,8 @@ class Error {
 class UserResponse {
   @Field({ nullable: true })
   user?: User;
-  @Field(() => [Error], { nullable: true })
-  error?: Error[];
+  @Field(() => BackendError, { nullable: true })
+  error?: BackendError;
 }
 
 @Resolver()
@@ -44,30 +44,24 @@ export class UserResolver {
     @Arg('password') password: string
   ): Promise<UserResponse> {
     try {
-      const errors: Error[] = [];
-
       if (EmailValidator(email)) {
-        errors.push(new Error('Email', 'Invalid email.'));
-      }
-
-      if (PasswordValidator(password)) {
-        errors.push(
-          new Error(
-            'Password',
-            'Password has to contain atleast 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character.'
-          )
-        );
+        return { error: new BackendError('Email', 'Invalid email.') };
       }
 
       const exists = await UserModel.findOne({ email });
 
       if (exists) {
-        errors.push(new Error('Email', 'This email is already registered.'));
+        return {
+          error: new BackendError('Email', 'This email is already registered.'),
+        };
       }
 
-      if (errors.length > 0) {
+      if (PasswordValidator(password)) {
         return {
-          error: errors,
+          error: new BackendError(
+            'Password',
+            'Password has to contain:\n8 characters minimum\n1 uppercase letter\n1 lowercase letter\n1 digit\n1 special character (#!@¤)'
+          ),
         };
       }
 
@@ -81,7 +75,7 @@ export class UserResolver {
     } catch (error) {
       console.log(error);
       return {
-        error: [new Error('Internal', '500 || Internal Server Error')],
+        error: new BackendError('Internal', '500 || Internal Server Error'),
       };
     }
   }
