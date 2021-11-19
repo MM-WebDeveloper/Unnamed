@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import Footer from '../components/Footer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
 import { useRegisterMutation } from '../generated/graphql';
 import { BackendError } from '../generated/graphql';
 
@@ -56,6 +54,16 @@ const register: React.FC<registerProps> = ({}) => {
               setPassword(e.target.value);
             }}
           />
+          {password ? (
+            <span title="Show password">
+              <FontAwesomeIcon
+                className="form_show_password_btn"
+                icon={faEye}
+                size="2x"
+                onClick={() => setShowPassword(!showPassword)}
+              />
+            </span>
+          ) : null}
         </div>
         <button className={'form__btn'} type="submit">
           Register
