@@ -1,21 +1,62 @@
-import React from 'react';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
+import React, { useState } from 'react';
 import Footer from '../components/Footer';
-import { useHelloQuery } from '../generated/graphql';
 
-export default function Home() {
-  const [result, reexecuteQuery] = useHelloQuery();
+interface loginProps {}
 
-  const { data, fetching, error } = result;
+const login: React.FC<loginProps> = ({}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
 
-  if (fetching) return <p>Loading...</p>;
-  if (error) return <p>Oh no... {error.message}</p>;
-  if (!data) return <p>No data found...</p>;
+  const onSubmitHandler = () => {
+    console.log('happened');
+  };
 
   return (
     <>
-      <div>Home Page</div>
-      <p>{data.hello}</p>
+      <form className={'form'} onSubmit={onSubmitHandler}>
+        <div className={'form__container'}>
+          <h1>PhotoShare</h1>
+          <div>
+            <label htmlFor="email" />
+            <input
+              className={'form__input'}
+              value={email}
+              placeholder="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor="password" />
+            <input
+              className={'form__input'}
+              value={password}
+              type={showPassword ? 'password' : 'text'}
+              placeholder="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </div>
+          <button className={'form__btn'} type="submit">
+            Login
+          </button>
+          <div className={'form__account'}>
+            <p>Don't have an account?</p>
+            <Link href="/register">
+              <a>Register</a>
+            </Link>
+          </div>
+        </div>
+      </form>
+
       <div className={'waves'} />
     </>
   );
-}
+};
+export default login;
