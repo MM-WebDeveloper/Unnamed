@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Nav from '../components/Navbar';
+import Footer from '../components/Footer';
 import Head from 'next/head';
 import { createClient, Provider } from 'urql';
 
@@ -17,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Nav />
       <Component {...pageProps} />
+      <Footer />
     </Provider>
   );
 }

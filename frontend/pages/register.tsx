@@ -32,7 +32,7 @@ const register: React.FC<registerProps> = ({}) => {
   };
 
   return (
-    <div>
+    <>
       <form className={'form'} onSubmit={onSubmitHandler}>
         <div>
           <label htmlFor="email" />
@@ -67,8 +67,7 @@ const register: React.FC<registerProps> = ({}) => {
         ) : null}
       </form>
       <div className={'waves'} />
-      <Footer />
-    </div>
+    </>
   );
 };
 export default register;

@@ -16,7 +16,6 @@ export default function Home() {
       <div>Home Page</div>
       <p>{data.hello}</p>
       <div className={'waves'} />
-      <Footer />
     </>
   );
 }

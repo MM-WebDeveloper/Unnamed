@@ -15,7 +15,7 @@ const login: React.FC<loginProps> = ({}) => {
   };
 
   return (
-    <div>
+    <>
       <form className={'form'} onSubmit={onSubmitHandler}>
         <div>
           <label htmlFor="email" />
@@ -55,8 +55,7 @@ const login: React.FC<loginProps> = ({}) => {
         </button>
       </form>
       <div className={'waves'} />
-      <Footer />
-    </div>
+    </>
   );
 };
 export default login;

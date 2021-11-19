@@ -3,6 +3,7 @@
 :root {
   --primary-color: #0000ff;
   --secondary-color: #fff;
+  --alert-color: #ff0800ee;
 }
 
 html {
@@ -13,7 +14,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  height: 100%;
+  height: 100vh;
   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -28,13 +29,14 @@ a {
 }
 
 #__next {
-  height: 100%;
+  height: 100vh;
+  position: relative;
 }
 
 /* Global form CSS */
 
 .form {
-  margin-top: 90px;
+  margin-top: 150px;
   left: 20px;
   display: flex;
   flex-direction: column;
@@ -45,7 +47,7 @@ a {
   margin-top: 10px;
   padding: 0.2rem;
   border: none;
-  border-bottom: 1.5px solid black;
+  border-bottom: 1.5px solid #000;
 }
 
 .form__input:focus {
@@ -65,7 +67,7 @@ a {
 }
 
 .form_show_password_btn {
-  color: blue;
+  color: var(--primary-color);
   cursor: pointer;
   position: absolute;
   margin-top: 5px;
@@ -74,7 +76,7 @@ a {
 
 .form_error_message {
   display: flex;
-  color: red;
+  color: var(--alert-color);
   margin-top: 5px;
   font-size: 1.2rem;
   font-weight: 600;
@@ -83,7 +85,7 @@ a {
 
 /* Global Aesthetic CSS */
 .waves {
-  background: blue;
+  background: var(--primary-color);
   height: 500px;
   width: 100%;
   position: absolute;
@@ -194,4 +196,29 @@ a {
     99% 50.04%,
     100% 50.94%
   );
+}
+
+/* Landscape orientation media queries */
+@media only screen and (max-height: 380px) {
+  .form {
+    margin-top: 15px;
+  }
+
+  .waves {
+    height: 200px;
+  }
+}
+
+@media only screen and (max-height: 280px) {
+  body,
+  #__next {
+    height: 130vh;
+  }
+  .form {
+    margin-top: 20px;
+  }
+
+  .waves {
+    height: 200px;
+  }
 }
