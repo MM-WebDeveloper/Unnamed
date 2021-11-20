@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider value={client}>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>PhotoShare</title>
+        <title>PhotoDiary</title>
       </Head>
       <Component {...pageProps} />
       <Footer />

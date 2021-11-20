@@ -1,4 +1,4 @@
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -19,13 +19,20 @@ const login: React.FC<loginProps> = ({}) => {
     <>
       <form className={'form'} onSubmit={onSubmitHandler}>
         <div className={'form__container'}>
-          <h1>PhotoShare</h1>
+          <div className={'form__logo'}>
+            <FontAwesomeIcon
+              icon={faCameraRetro}
+              size="2x"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+            <h1>PhotoDiary</h1>
+          </div>
           <div>
             <label htmlFor="email" />
             <input
               className={'form__input'}
               value={email}
-              placeholder="email"
+              placeholder="email or username"
               onChange={(e) => {
                 setEmail(e.target.value);
               }}

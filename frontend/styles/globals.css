@@ -41,12 +41,18 @@ a {
 /* Global form CSS */
 
 .form {
-  margin-top: 150px;
+  margin-top: 115px;
 }
 
-.form h1 {
+.form__logo {
+  display: flex;
   font-family: 'Praise', cursive;
-  font-size: 4rem;
+  font-size: 2rem;
+  justify-content: space-between;
+}
+
+.form__logo h1 {
+  margin-left: 5px;
 }
 
 .form__container {
@@ -63,6 +69,7 @@ a {
   border: 1px solid rgb(38, 38, 38);
   background-color: rgb(250, 250, 250);
   font-size: 1.6rem;
+  border-radius: 5px;
 }
 
 .form__input:focus {
@@ -80,6 +87,7 @@ a {
   border: 2px solid var(--primary-color);
   font-size: 1.5rem;
   width: 10rem;
+  border-radius: 5px;
 }
 
 .form__show_password_btn {
@@ -112,6 +120,7 @@ a {
   font-size: 1.2rem;
   font-weight: 600;
   white-space: pre-wrap;
+  text-align: center;
 }
 
 /* Global Aesthetic CSS */
