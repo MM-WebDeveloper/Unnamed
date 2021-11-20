@@ -7,31 +7,35 @@ import {
   Resolver,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
-import { PasswordValidator, EmailValidator } from '../helpers/validators';
+import {
+  PasswordValidator,
+  EmailValidator,
+  UsernameValidator,
+} from '../helpers/validators';
 import { User, UserModel } from '../entities/user';
-
-@ObjectType()
-class BackendError {
-  @Field()
-  field: string;
-  @Field()
-  message: string;
-
-  constructor(field: string, message: string) {
-    this.field = field;
-    this.message = message;
-  }
-}
 
 @ObjectType()
 class RegisterResponse {
   @Field(() => Boolean)
-  success: Boolean;
-  @Field(() => BackendError, { nullable: true })
-  error?: BackendError;
+  success: boolean;
+  @Field(() => String, { nullable: true })
+  error?: string;
 
-  constructor(success: Boolean, error?: BackendError) {
+  constructor(success: boolean, error?: string) {
     this.success = success;
+    this.error = error;
+  }
+}
+
+@ObjectType()
+class LoginResponse {
+  @Field(() => String, { nullable: true })
+  accessToken?: string;
+  @Field(() => String, { nullable: true })
+  error?: string;
+
+  constructor(accessToken: string, error?: string) {
+    this.accessToken = accessToken;
     this.error = error;
   }
 }
@@ -52,45 +56,34 @@ export class UserResolver {
   ): Promise<RegisterResponse> {
     try {
       if (EmailValidator(email)) {
-        return new RegisterResponse(
-          false,
-          new BackendError('Email', 'Invalid email.')
-        );
+        return new RegisterResponse(false, 'Invalid email.');
       }
 
       const emailExists = await UserModel.findOne({ email });
 
       if (emailExists) {
-        return new RegisterResponse(
-          false,
-          new BackendError('Email', 'This email is already registered.')
-        );
+        return new RegisterResponse(false, 'This email is already registered.');
+      }
+
+      if (UsernameValidator(username)) {
+        return new RegisterResponse(false, 'Choose your username.');
       }
 
       const usernameExists = await UserModel.findOne({ username });
 
       if (usernameExists) {
-        return new RegisterResponse(
-          false,
-          new BackendError('Username', 'This username is already taken.')
-        );
+        return new RegisterResponse(false, 'This username is already taken.');
       }
 
       if (PasswordValidator(password)) {
         return new RegisterResponse(
           false,
-          new BackendError(
-            'Password',
-            'Password is too weak.\n8 characters minimum.\nUse special characters (#!¤%).\nUse digits, small and capital letters.'
-          )
+          'Password is too weak.\n8 characters minimum.\nUse special characters (#!¤%).\nUse digits, small and capital letters.'
         );
       }
 
       if (password !== confirmPassword) {
-        return new RegisterResponse(
-          false,
-          new BackendError('Password', `Passwords don't match.`)
-        );
+        return new RegisterResponse(false, `Passwords don't match.`);
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -101,11 +94,12 @@ export class UserResolver {
 
       return new RegisterResponse(true);
     } catch (error) {
-      console.log(error);
-      return new RegisterResponse(
-        false,
-        new BackendError('Internal', '500 || Internal Server Error')
-      );
+      return new RegisterResponse(false, '500 || Internal Server Error');
     }
+  }
+
+  @Mutation(() => LoginResponse)
+  async login() {
+    return new LoginResponse('token');
   }
 }
