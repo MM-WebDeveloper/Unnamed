@@ -1,18 +1,39 @@
-import { faCameraRetro } from '@fortawesome/free-solid-svg-icons';
+import { faCameraRetro, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import Footer from '../components/Footer';
+import { useLoginMutation } from '../generated/graphql';
 
 interface loginProps {}
 
 const login: React.FC<loginProps> = ({}) => {
-  const [email, setEmail] = useState('');
+  const [emailOrUsername, setEmailOrUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [error, setError] = useState('');
+  const [updateLoginResult, login] = useLoginMutation();
 
-  const onSubmitHandler = () => {
-    console.log('happened');
+  const onSubmitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await login({
+        emailOrUsername,
+        password,
+      });
+
+      const api_error = data?.login.error;
+
+      if (api_error) {
+        setError(api_error);
+        return;
+      }
+
+      console.log(data?.login.accessToken);
+      // router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -20,21 +41,17 @@ const login: React.FC<loginProps> = ({}) => {
       <form className={'form'} onSubmit={onSubmitHandler}>
         <div className={'form__container'}>
           <div className={'form__logo'}>
-            <FontAwesomeIcon
-              icon={faCameraRetro}
-              size="2x"
-              onClick={() => setShowPassword(!showPassword)}
-            />
+            <FontAwesomeIcon icon={faCameraRetro} size="2x" />
             <h1>PhotoDiary</h1>
           </div>
           <div>
-            <label htmlFor="email" />
+            <label htmlFor="emailOrUsername" />
             <input
               className={'form__input'}
-              value={email}
+              value={emailOrUsername}
               placeholder="email or username"
               onChange={(e) => {
-                setEmail(e.target.value);
+                setEmailOrUsername(e.target.value);
               }}
             />
           </div>
@@ -49,10 +66,25 @@ const login: React.FC<loginProps> = ({}) => {
                 setPassword(e.target.value);
               }}
             />
+            {password ? (
+              <span title="Show password">
+                <FontAwesomeIcon
+                  className="form__show_password_btn"
+                  icon={faEye}
+                  size="2x"
+                  onClick={() => setShowPassword(!showPassword)}
+                />
+              </span>
+            ) : null}
           </div>
           <button className={'form__btn'} type="submit">
             Login
           </button>
+          {error ? (
+            <div className={'form_error_message'}>
+              <p>{error}</p>
+            </div>
+          ) : null}
           <div className={'form__account'}>
             <p>Don't have an account?</p>
             <Link href="/register">

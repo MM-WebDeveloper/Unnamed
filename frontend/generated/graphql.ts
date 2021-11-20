@@ -28,6 +28,12 @@ export type Mutation = {
 };
 
 
+export type MutationLoginArgs = {
+  emailOrUsername: Scalars['String'];
+  password: Scalars['String'];
+};
+
+
 export type MutationRegisterArgs = {
   confirmPassword: Scalars['String'];
   email: Scalars['String'];
@@ -51,6 +57,14 @@ export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type HelloQuery = { __typename?: 'Query', hello: string };
 
+export type LoginMutationVariables = Exact<{
+  emailOrUsername: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken?: string | null | undefined, error?: string | null | undefined } };
+
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   username: Scalars['String'];
@@ -70,6 +84,18 @@ export const HelloDocument = gql`
 
 export function useHelloQuery(options: Omit<Urql.UseQueryArgs<HelloQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<HelloQuery>({ query: HelloDocument, ...options });
+};
+export const LoginDocument = gql`
+    mutation Login($emailOrUsername: String!, $password: String!) {
+  login(emailOrUsername: $emailOrUsername, password: $password) {
+    accessToken
+    error
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($email: String!, $username: String!, $password: String!, $confirmPassword: String!) {

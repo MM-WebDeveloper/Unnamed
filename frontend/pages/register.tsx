@@ -47,11 +47,7 @@ const register: React.FC<registerProps> = ({}) => {
       <form className={'form'} onSubmit={onSubmitHandler}>
         <div className={'form__container'}>
           <div className={'form__logo'}>
-            <FontAwesomeIcon
-              icon={faCameraRetro}
-              size="2x"
-              onClick={() => setShowPassword(!showPassword)}
-            />
+            <FontAwesomeIcon icon={faCameraRetro} size="2x" />
             <h1>PhotoDiary</h1>
           </div>
           <div>

@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Praise&family=Roboto:wght@300;700&display=swap');
 
 :root {
-  --primary-color: #0000ff;
+  --primary-color: #0000e9;
   --secondary-color: #fafafa;
   --alert-color: #cc1500;
 }
@@ -70,6 +70,7 @@ a {
   background-color: #fafafa;
   font-size: 1.6rem;
   border-radius: 5px;
+  min-width: 230px;
 }
 
 .form__input:focus {
@@ -102,14 +103,15 @@ a {
   display: flex;
   align-items: center;
   margin-top: 10px;
+  font-size: 1.2rem;
 }
 
 .form__account p {
-  margin-right: 2px;
+  margin-right: 3px;
 }
 
 .form__account a {
-  color: blue;
+  color: var(--primary-color);
   font-weight: bold;
 }
 
@@ -239,7 +241,7 @@ a {
 }
 
 /* Landscape orientation media queries */
-@media only screen and (max-height: 380px) {
+@media only screen and (max-height: 428px) {
   body,
   #__next {
     height: 130vh;
