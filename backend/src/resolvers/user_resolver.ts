@@ -7,12 +7,14 @@ import {
   Resolver,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import {
   PasswordValidator,
   EmailValidator,
   UsernameValidator,
 } from '../helpers/validators';
 import { User, UserModel } from '../entities/user';
+import 'dotenv/config';
 
 @ObjectType()
 class RegisterResponse {
@@ -34,7 +36,7 @@ class LoginResponse {
   @Field(() => String, { nullable: true })
   error?: string;
 
-  constructor(accessToken: string, error?: string) {
+  constructor(accessToken?: string, error?: string) {
     this.accessToken = accessToken;
     this.error = error;
   }
@@ -99,7 +101,34 @@ export class UserResolver {
   }
 
   @Mutation(() => LoginResponse)
-  async login() {
-    return new LoginResponse('token');
+  async login(
+    @Arg('emailOrUsername') emailOrUsername: string,
+    @Arg('password') password: string
+  ) {
+    try {
+      const user = await UserModel.findOne({
+        $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
+      });
+
+      if (!user) {
+        return new LoginResponse(undefined, 'Invalid email or password.');
+      }
+
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      if (!validPassword) {
+        return new LoginResponse(undefined, 'Invalid email or password.');
+      }
+
+      const accessToken = jwt.sign(
+        { id: user._id.toString() },
+        process.env.JWT_SECRET!,
+        { expiresIn: '365d' }
+      );
+
+      return new LoginResponse(accessToken);
+    } catch (error) {
+      return new LoginResponse(undefined, '500 || Internal Server Error');
+    }
   }
 }
