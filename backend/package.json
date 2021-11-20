@@ -27,6 +27,7 @@
     "graphql": "^15.7.2",
     "graphql-yoga": "^1.18.3",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.2.0",
     "mongoose": "^6.0.13",
     "reflect-metadata": "^0.1.13"
   }

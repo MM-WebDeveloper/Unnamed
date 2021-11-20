@@ -24,11 +24,16 @@ class BackendError {
 }
 
 @ObjectType()
-class UserResponse {
-  @Field({ nullable: true })
-  user?: User;
+class RegisterResponse {
+  @Field(() => Boolean)
+  success: Boolean;
   @Field(() => BackendError, { nullable: true })
   error?: BackendError;
+
+  constructor(success: Boolean, error?: BackendError) {
+    this.success = success;
+    this.error = error;
+  }
 }
 
 @Resolver()
@@ -38,45 +43,69 @@ export class UserResolver {
     return 'hello';
   }
 
-  @Mutation(() => UserResponse)
+  @Mutation(() => RegisterResponse)
   async register(
     @Arg('email') email: string,
-    @Arg('password') password: string
-  ): Promise<UserResponse> {
+    @Arg('username') username: string,
+    @Arg('password') password: string,
+    @Arg('confirmPassword') confirmPassword: string
+  ): Promise<RegisterResponse> {
     try {
       if (EmailValidator(email)) {
-        return { error: new BackendError('Email', 'Invalid email.') };
+        return new RegisterResponse(
+          false,
+          new BackendError('Email', 'Invalid email.')
+        );
       }
 
-      const exists = await UserModel.findOne({ email });
+      const emailExists = await UserModel.findOne({ email });
 
-      if (exists) {
-        return {
-          error: new BackendError('Email', 'This email is already registered.'),
-        };
+      if (emailExists) {
+        return new RegisterResponse(
+          false,
+          new BackendError('Email', 'This email is already registered.')
+        );
+      }
+
+      const usernameExists = await UserModel.findOne({ username });
+
+      if (usernameExists) {
+        return new RegisterResponse(
+          false,
+          new BackendError('Username', 'This username is already taken.')
+        );
       }
 
       if (PasswordValidator(password)) {
-        return {
-          error: new BackendError(
+        return new RegisterResponse(
+          false,
+          new BackendError(
             'Password',
-            'Password has to contain:\n8 characters minimum\n1 uppercase letter\n1 lowercase letter\n1 digit\n1 special character (#!@¤)'
-          ),
-        };
+            'Password is too weak.\n8 characters minimum.\nUse special characters (#!¤%).\nUse digits, small and capital letters.'
+          )
+        );
+      }
+
+      if (password !== confirmPassword) {
+        return new RegisterResponse(
+          false,
+          new BackendError('Password', `Passwords don't match.`)
+        );
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User(email, hashedPassword);
+      const user = new User(email, username, hashedPassword);
 
       const doc = new UserModel(user);
       await doc.save();
 
-      return { user };
+      return new RegisterResponse(true);
     } catch (error) {
       console.log(error);
-      return {
-        error: new BackendError('Internal', '500 || Internal Server Error'),
-      };
+      return new RegisterResponse(
+        false,
+        new BackendError('Internal', '500 || Internal Server Error')
+      );
     }
   }
 }
