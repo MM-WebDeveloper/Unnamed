@@ -11,9 +11,6 @@ mutation Register(
     confirmPassword: $confirmPassword
   ) {
     success
-    error {
-      field
-      message
-    }
+    error
   }
 }

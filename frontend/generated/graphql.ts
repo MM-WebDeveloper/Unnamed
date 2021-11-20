@@ -15,14 +15,15 @@ export type Scalars = {
   Float: number;
 };
 
-export type BackendError = {
-  __typename?: 'BackendError';
-  field: Scalars['String'];
-  message: Scalars['String'];
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  accessToken?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  login: LoginResponse;
   register: RegisterResponse;
 };
 
@@ -41,7 +42,7 @@ export type Query = {
 
 export type RegisterResponse = {
   __typename?: 'RegisterResponse';
-  error?: Maybe<BackendError>;
+  error?: Maybe<Scalars['String']>;
   success: Scalars['Boolean'];
 };
 
@@ -58,7 +59,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success: boolean, error?: { __typename?: 'BackendError', field: string, message: string } | null | undefined } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success: boolean, error?: string | null | undefined } };
 
 
 export const HelloDocument = gql`
@@ -79,10 +80,7 @@ export const RegisterDocument = gql`
     confirmPassword: $confirmPassword
   ) {
     success
-    error {
-      field
-      message
-    }
+    error
   }
 }
     `;

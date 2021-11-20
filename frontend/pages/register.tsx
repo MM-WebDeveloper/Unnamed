@@ -1,9 +1,9 @@
 import { faEye, faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRegisterMutation } from '../generated/graphql';
-import { BackendError } from '../generated/graphql';
 
 interface registerProps {}
 
@@ -14,8 +14,9 @@ const register: React.FC<registerProps> = ({}) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
-  const [error, setError] = useState<BackendError>();
+  const [error, setError] = useState('');
   const [updateRegisterResult, register] = useRegisterMutation();
+  const router = useRouter();
 
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,12 +28,14 @@ const register: React.FC<registerProps> = ({}) => {
         password,
         confirmPassword,
       });
+
       const api_error = data?.register.error;
-      console.log(data);
+
       if (api_error) {
-        console.log(api_error);
         setError(api_error);
       }
+
+      router.push('/');
     } catch (error) {
       console.log(error);
     }
@@ -121,7 +124,7 @@ const register: React.FC<registerProps> = ({}) => {
           </button>
           {error ? (
             <div className={'form_error_message'}>
-              <p>{error.message}</p>
+              <p>{error}</p>
             </div>
           ) : null}
           <div className={'form__account'}>

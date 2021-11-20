@@ -9,7 +9,7 @@ interface FooterProps {}
 const Footer: React.FC<FooterProps> = ({}) => {
   return (
     <div className={styles['footer']}>
-      <p>&copy; 2021 PhotoDiary</p>
+      <p>&copy; 2021 PhotoDiary | Milan Mlinar</p>
       <Link href="https://github.com/MM-WebDeveloper">
         <a
           target="_blank"
