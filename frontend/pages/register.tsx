@@ -33,6 +33,7 @@ const register: React.FC<registerProps> = ({}) => {
 
       if (api_error) {
         setError(api_error);
+        return;
       }
 
       router.push('/');
