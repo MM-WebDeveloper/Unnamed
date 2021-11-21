@@ -93,8 +93,7 @@ export class UserResolver {
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User(email, username, hashedPassword);
 
-      const doc = new UserModel(user);
-      await doc.save();
+      await new UserModel(user).save();
 
       return new RegisterResponse(true);
     } catch (error) {
@@ -133,6 +132,7 @@ export class UserResolver {
 
       return new LoginResponse(accessToken);
     } catch (error) {
+      console.log(error);
       return new LoginResponse(undefined, '500 || Internal Server Error');
     }
   }

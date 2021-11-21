@@ -30,7 +30,7 @@ const run = async () => {
   const server = new GraphQLServer({
     typeDefs,
     resolvers,
-    context: (ctx: ContextParameters) => ({ ctx }),
+    context: ({ response, request }) => ({ response, request }),
   });
 
   server.start(options, () =>
