@@ -1,5 +1,6 @@
 import {
   Arg,
+  Ctx,
   Field,
   Mutation,
   ObjectType,
@@ -15,6 +16,7 @@ import {
 } from '../helpers/validators';
 import { User, UserModel } from '../entities/user';
 import 'dotenv/config';
+import { ContextParameters } from 'graphql-yoga/dist/types';
 
 @ObjectType()
 class RegisterResponse {
@@ -103,7 +105,8 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   async login(
     @Arg('emailOrUsername') emailOrUsername: string,
-    @Arg('password') password: string
+    @Arg('password') password: string,
+    @Ctx() ctx: ContextParameters
   ) {
     try {
       const user = await UserModel.findOne({
@@ -125,6 +128,8 @@ export class UserResolver {
         process.env.JWT_SECRET!,
         { expiresIn: '365d' }
       );
+
+      ctx.response.cookie('uid', accessToken, { httpOnly: true });
 
       return new LoginResponse(accessToken);
     } catch (error) {

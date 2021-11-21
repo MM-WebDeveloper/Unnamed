@@ -4,6 +4,7 @@ import { buildTypeDefsAndResolvers } from 'type-graphql';
 import mongoose from 'mongoose';
 import 'dotenv/config';
 import { UserResolver } from './resolvers/user_resolver';
+import { ContextParameters } from 'graphql-yoga/dist/types';
 
 const run = async () => {
   const PORT = process.env.PORT || 4000;
@@ -26,7 +27,11 @@ const run = async () => {
     cors: { origin: 'http://localhost:3000', credentials: true },
   };
 
-  const server = new GraphQLServer({ typeDefs, resolvers });
+  const server = new GraphQLServer({
+    typeDefs,
+    resolvers,
+    context: (ctx: ContextParameters) => ({ ctx }),
+  });
 
   server.start(options, () =>
     console.log(`Server started: http://localhost:${PORT}/playground`)
