@@ -1,8 +1,10 @@
 import { faCameraRetro, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState, useContext } from 'react';
 import { useLoginMutation } from '../generated/graphql';
+import { UserContext } from '../context/index';
 
 interface loginProps {}
 
@@ -12,6 +14,14 @@ const login: React.FC<loginProps> = ({}) => {
   const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState('');
   const [updateLoginResult, login] = useLoginMutation();
+  const { state, setState } = useContext(UserContext);
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (localStorage.getItem('token')) {
+  //     router.push('/dashboard');
+  //   }
+  // }, []);
 
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +39,11 @@ const login: React.FC<loginProps> = ({}) => {
         return;
       }
 
-      console.log(data?.login.accessToken);
-      // router.push('/');
+      if (data?.login.accessToken) {
+        localStorage.setItem('token', data.login.accessToken!);
+      }
+
+      router.push('/dashboard');
     } catch (error) {
       console.log(error);
     }
@@ -91,6 +104,7 @@ const login: React.FC<loginProps> = ({}) => {
               <a>Register</a>
             </Link>
           </div>
+          {JSON.stringify(state)}
         </div>
       </form>
 
