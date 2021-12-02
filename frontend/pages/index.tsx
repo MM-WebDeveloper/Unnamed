@@ -17,12 +17,6 @@ const login: React.FC<loginProps> = ({}) => {
   const { state, setState } = useContext(UserContext);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (localStorage.getItem('token')) {
-  //     router.push('/dashboard');
-  //   }
-  // }, []);
-
   const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
