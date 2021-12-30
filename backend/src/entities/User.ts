@@ -1,4 +1,4 @@
-import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
+import { getModelForClass, prop } from '@typegoose/typegoose';
 import { Field, ObjectType } from 'type-graphql';
 
 @ObjectType()
@@ -14,10 +14,19 @@ export class User {
   @prop({ required: true })
   public password: string;
 
-  constructor(email: string, username: string, password: string) {
+  @prop({ default: false })
+  public confirmed: boolean;
+
+  constructor(
+    email: string,
+    username: string,
+    password: string,
+    confirmed: boolean
+  ) {
     this.email = email;
     this.username = username;
     this.password = password;
+    this.confirmed = confirmed;
   }
 }
 

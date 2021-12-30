@@ -14,7 +14,7 @@ import {
   EmailValidator,
   UsernameValidator,
 } from '../helpers/validators';
-import { User, UserModel } from '../entities/user';
+import { User, UserModel } from '../entities/User';
 import 'dotenv/config';
 import { ContextParameters } from 'graphql-yoga/dist/types';
 
@@ -91,7 +91,7 @@ export class UserResolver {
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User(email, username, hashedPassword);
+      const user = new User(email, username, hashedPassword, false);
 
       await new UserModel(user).save();
 
