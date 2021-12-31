@@ -23,8 +23,14 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  confirm: Scalars['Boolean'];
   login: LoginResponse;
   register: RegisterResponse;
+};
+
+
+export type MutationConfirmArgs = {
+  token: Scalars['String'];
 };
 
 
@@ -52,6 +58,13 @@ export type RegisterResponse = {
   success: Scalars['Boolean'];
 };
 
+export type ConfirmMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type ConfirmMutation = { __typename?: 'Mutation', confirm: boolean };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -76,6 +89,15 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success: boolean, error?: string | null | undefined } };
 
 
+export const ConfirmDocument = gql`
+    mutation Confirm($token: String!) {
+  confirm(token: $token)
+}
+    `;
+
+export function useConfirmMutation() {
+  return Urql.useMutation<ConfirmMutation, ConfirmMutationVariables>(ConfirmDocument);
+};
 export const HelloDocument = gql`
     query Hello {
   hello
