@@ -17,6 +17,7 @@ import {
 import { User, UserModel } from '../entities/User';
 import 'dotenv/config';
 import { ContextParameters } from 'graphql-yoga/dist/types';
+import { sendEmail } from '../utils/sendEmail';
 
 @ObjectType()
 class RegisterResponse {
@@ -93,7 +94,17 @@ export class UserResolver {
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User(email, username, hashedPassword, false);
 
-      await new UserModel(user).save();
+      const userId = await (await new UserModel(user).save())._id;
+
+      const emailToken = jwt.sign(
+        { email: userId.toString() },
+        process.env.JWT_EMAIL_SECRET!,
+        { expiresIn: '365d' }
+      );
+
+      const confirmationUrl = `http://localhost:3000/user/confirm/${emailToken}`;
+
+      await sendEmail(user.email, confirmationUrl);
 
       return new RegisterResponse(true);
     } catch (error) {
@@ -114,6 +125,13 @@ export class UserResolver {
 
       if (!user) {
         return new LoginResponse(undefined, 'Invalid email or password.');
+      }
+
+      if (!user.confirmed) {
+        return new LoginResponse(
+          undefined,
+          'You have to confirm your email before you can login.'
+        );
       }
 
       const validPassword = await bcrypt.compare(password, user.password);
