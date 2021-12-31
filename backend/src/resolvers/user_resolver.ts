@@ -8,7 +8,7 @@ import {
   Resolver,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import {
   PasswordValidator,
   EmailValidator,
@@ -97,12 +97,12 @@ export class UserResolver {
       const userId = await (await new UserModel(user).save())._id;
 
       const emailToken = jwt.sign(
-        { email: userId.toString() },
+        { id: userId.toString() },
         process.env.JWT_EMAIL_SECRET!,
         { expiresIn: '365d' }
       );
 
-      const confirmationUrl = `http://localhost:3000/user/confirm/${emailToken}`;
+      const confirmationUrl = `http://localhost:3000/confirm/${emailToken}`;
 
       await sendEmail(user.email, confirmationUrl);
 
@@ -153,5 +153,19 @@ export class UserResolver {
       console.log(error);
       return new LoginResponse(undefined, '500 || Internal Server Error');
     }
+  }
+
+  @Mutation(() => Boolean)
+  async confirm(@Arg('token') token: string) {
+    const decodedToken = jwt.verify(
+      token,
+      process.env.JWT_EMAIL_SECRET!
+    ) as JwtPayload;
+
+    await UserModel.findOne({ id: decodedToken.id }).update({
+      confirmed: true,
+    });
+
+    return true;
   }
 }
