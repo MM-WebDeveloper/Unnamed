@@ -1,23 +1,20 @@
 import {
   Arg,
-  Ctx,
   Field,
   Mutation,
   ObjectType,
   Query,
   Resolver,
 } from 'type-graphql';
-import bcrypt from 'bcryptjs';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { User, UserModel } from '../entities/User';
 import {
-  PasswordValidator,
   EmailValidator,
+  PasswordValidator,
   UsernameValidator,
 } from '../helpers/validators';
-import { User, UserModel } from '../entities/User';
-import 'dotenv/config';
-import { ContextParameters } from 'graphql-yoga/dist/types';
 import { sendEmail } from '../utils/sendEmail';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 @ObjectType()
 class RegisterResponse {
@@ -32,21 +29,8 @@ class RegisterResponse {
   }
 }
 
-@ObjectType()
-class LoginResponse {
-  @Field(() => String, { nullable: true })
-  accessToken?: string;
-  @Field(() => String, { nullable: true })
-  error?: string;
-
-  constructor(accessToken?: string, error?: string) {
-    this.accessToken = accessToken;
-    this.error = error;
-  }
-}
-
 @Resolver()
-export class UserResolver {
+export class RegisterResolver {
   @Query(() => String)
   hello() {
     return 'hello';
@@ -110,62 +94,5 @@ export class UserResolver {
     } catch (error) {
       return new RegisterResponse(false, '500 || Internal Server Error');
     }
-  }
-
-  @Mutation(() => LoginResponse)
-  async login(
-    @Arg('emailOrUsername') emailOrUsername: string,
-    @Arg('password') password: string,
-    @Ctx() ctx: ContextParameters
-  ) {
-    try {
-      const user = await UserModel.findOne({
-        $or: [{ email: emailOrUsername }, { username: emailOrUsername }],
-      });
-
-      if (!user) {
-        return new LoginResponse(undefined, 'Invalid email or password.');
-      }
-
-      if (!user.confirmed) {
-        return new LoginResponse(
-          undefined,
-          'You have to confirm your email before you can login.'
-        );
-      }
-
-      const validPassword = await bcrypt.compare(password, user.password);
-
-      if (!validPassword) {
-        return new LoginResponse(undefined, 'Invalid email or password.');
-      }
-
-      const accessToken = jwt.sign(
-        { id: user._id.toString() },
-        process.env.JWT_SECRET!,
-        { expiresIn: '365d' }
-      );
-
-      ctx.response.cookie('uid', accessToken, { httpOnly: true });
-
-      return new LoginResponse(accessToken);
-    } catch (error) {
-      console.log(error);
-      return new LoginResponse(undefined, '500 || Internal Server Error');
-    }
-  }
-
-  @Mutation(() => Boolean)
-  async confirm(@Arg('token') token: string) {
-    const decodedToken = jwt.verify(
-      token,
-      process.env.JWT_EMAIL_SECRET!
-    ) as JwtPayload;
-
-    await UserModel.findOne({ id: decodedToken.id }).update({
-      confirmed: true,
-    });
-
-    return true;
   }
 }

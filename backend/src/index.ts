@@ -1,10 +1,11 @@
-import { GraphQLServer, Options } from 'graphql-yoga';
+import 'dotenv/config';
 import 'reflect-metadata';
 import { buildTypeDefsAndResolvers } from 'type-graphql';
+import { ConfirmResolver } from './resolvers/Confirm';
+import { GraphQLServer, Options } from 'graphql-yoga';
+import { LoginResolver } from './resolvers/Login';
+import { RegisterResolver } from './resolvers/Register';
 import mongoose from 'mongoose';
-import 'dotenv/config';
-import { UserResolver } from './resolvers/user_resolver';
-import { ContextParameters } from 'graphql-yoga/dist/types';
 
 const run = async () => {
   const PORT = process.env.PORT || 4000;
@@ -17,7 +18,7 @@ const run = async () => {
     });
 
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
-    resolvers: [UserResolver],
+    resolvers: [RegisterResolver, LoginResolver, ConfirmResolver],
   });
 
   const options: Options = {
