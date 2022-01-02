@@ -15,6 +15,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type ConfirmResponse = {
+  __typename?: 'ConfirmResponse';
+  error?: Maybe<Scalars['String']>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken?: Maybe<Scalars['String']>;
@@ -23,7 +29,7 @@ export type LoginResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  confirm: Scalars['Boolean'];
+  confirm: ConfirmResponse;
   login: LoginResponse;
   register: RegisterResponse;
 };
@@ -63,7 +69,7 @@ export type ConfirmMutationVariables = Exact<{
 }>;
 
 
-export type ConfirmMutation = { __typename?: 'Mutation', confirm: boolean };
+export type ConfirmMutation = { __typename?: 'Mutation', confirm: { __typename?: 'ConfirmResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -91,7 +97,10 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 
 export const ConfirmDocument = gql`
     mutation Confirm($token: String!) {
-  confirm(token: $token)
+  confirm(token: $token) {
+    success
+    error
+  }
 }
     `;
 
