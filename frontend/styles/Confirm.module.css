@@ -1,34 +1,34 @@
 .confirm {
-  display: flex;
-  justify-content: center;
-  align-content: center;
+	display: flex;
+	justify-content: center;
+	align-content: center;
 }
 
 .confirm_info {
-  margin-top: 20rem;
-  text-align: center;
-  height: 200px;
+	margin-top: 17rem;
+	text-align: center;
+	height: 200px;
 }
 
 .confirm_info > h1 {
-  color: #000;
-  font-size: 1.5rem;
+	color: #000;
+	font-size: 1.5rem;
 }
 
 .confirm_info > a {
-  color: var(--primary-color);
-  font-size: 1.4rem;
-  font-weight: bold;
-  display: inline;
+	color: var(--primary-color);
+	font-size: 1.4rem;
+	font-weight: bold;
+	display: inline;
 }
 
 @media only screen and (min-height: 900px) {
-  .confirm_info > h1 {
-    font-size: 3rem;
-  }
+	.confirm_info > h1 {
+		font-size: 3rem;
+	}
 
-  .confirm_info > a {
-    font-size: 2rem;
-    margin-top: 100px;
-  }
+	.confirm_info > a {
+		font-size: 2rem;
+		margin-top: 100px;
+	}
 }
