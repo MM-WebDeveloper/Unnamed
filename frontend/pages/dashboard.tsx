@@ -3,14 +3,13 @@ import { UserContext } from '../context/index';
 import { useRouter } from 'next/router';
 import React, { useEffect, useContext } from 'react';
 import { useLogoutMutation } from '../generated/graphql';
+import { NextPage } from 'next';
+import { withAuth } from '../auth/withAuth';
 
-interface dashboardProps {
-	cookie: string;
-}
-
-const dashboard: React.FC<dashboardProps> = (props) => {
+const dashboard: NextPage = () => {
 	const { state, setState } = useContext(UserContext);
 	const [updateLogoutResult, logout] = useLogoutMutation();
+	// const [updateUserResult, user] = useUserQuery();
 	const router = useRouter();
 
 	const logoutUser = () => {
@@ -27,21 +26,10 @@ const dashboard: React.FC<dashboardProps> = (props) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-	const { req } = ctx;
-
-	const { cookies } = req;
-
-	if (cookies.uid) {
-		return { props: { cookie: cookies.uid } };
-	}
-
+export const getServerSideProps: GetServerSideProps = withAuth(async (ctx) => {
 	return {
-		redirect: {
-			permanent: false,
-			destination: '/',
-		},
+		props: {},
 	};
-};
+});
 
 export default dashboard;

@@ -5,6 +5,7 @@ import { UserContext } from '../context/index';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useEffect, useState, useContext } from 'react';
+import { GetServerSideProps } from 'next';
 
 interface loginProps {}
 
@@ -105,4 +106,5 @@ const login: React.FC<loginProps> = ({}) => {
 		</>
 	);
 };
+
 export default login;

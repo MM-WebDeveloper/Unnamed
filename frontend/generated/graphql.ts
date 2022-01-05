@@ -58,6 +58,13 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
+  user2: Scalars['String'];
+  validateToken: Scalars['Boolean'];
+};
+
+
+export type QueryValidateTokenArgs = {
+  token: Scalars['String'];
 };
 
 export type RegisterResponse = {
@@ -106,6 +113,13 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success: boolean, error?: string | null | undefined } };
+
+export type ValidateTokenQueryVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type ValidateTokenQuery = { __typename?: 'Query', validateToken: boolean };
 
 
 export const ConfirmDocument = gql`
@@ -170,4 +184,13 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const ValidateTokenDocument = gql`
+    query ValidateToken($token: String!) {
+  validateToken(token: $token)
+}
+    `;
+
+export function useValidateTokenQuery(options: Omit<Urql.UseQueryArgs<ValidateTokenQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ValidateTokenQuery>({ query: ValidateTokenDocument, ...options });
 };
