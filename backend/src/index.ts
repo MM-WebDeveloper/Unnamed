@@ -7,6 +7,7 @@ import { LoginResolver } from './resolvers/Login';
 import { RegisterResolver } from './resolvers/Register';
 import mongoose from 'mongoose';
 import { LogoutResolver } from './resolvers/Logout';
+import { ValidateTokenResolver } from './resolvers/ValidateToken';
 
 const run = async () => {
 	const PORT = process.env.PORT || 4000;
@@ -24,6 +25,7 @@ const run = async () => {
 			LoginResolver,
 			ConfirmResolver,
 			LogoutResolver,
+			ValidateTokenResolver,
 		],
 	});
 
