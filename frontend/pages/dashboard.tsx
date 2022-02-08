@@ -1,15 +1,13 @@
 import { GetServerSideProps } from 'next';
 import { UserContext } from '../context/index';
 import { useRouter } from 'next/router';
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useLogoutMutation } from '../generated/graphql';
 import { NextPage } from 'next';
-import { withAuth } from '../auth/withAuth';
 
 const dashboard: NextPage = () => {
 	const { state, setState } = useContext(UserContext);
 	const [updateLogoutResult, logout] = useLogoutMutation();
-	// const [updateUserResult, user] = useUserQuery();
 	const router = useRouter();
 
 	const logoutUser = () => {
@@ -25,11 +23,5 @@ const dashboard: NextPage = () => {
 		</div>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withAuth(async (ctx) => {
-	return {
-		props: {},
-	};
-});
 
 export default dashboard;
