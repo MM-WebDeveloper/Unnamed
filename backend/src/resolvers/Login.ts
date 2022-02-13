@@ -71,7 +71,7 @@ export class LoginResolver {
 			}
 
 			const accessToken = jwt.sign(
-				{ id: user._id.toString() },
+				{ userId: user._id.toString() },
 				process.env.JWT_SECRET!,
 				{ expiresIn: '365d' }
 			);

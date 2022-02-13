@@ -1,9 +1,3 @@
-import { ContextParameters } from 'graphql-yoga/dist/types';
-import { MiddlewareFn } from 'type-graphql';
-import jwt from 'jsonwebtoken';
-import { isContext } from 'vm';
-import { ContextType } from '../types/ContextType';
-
 export const EmailValidator = (email: string) => {
 	const REGEX_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -36,31 +30,4 @@ export const PasswordValidator = (password: string) => {
 		return true;
 	}
 	return false;
-};
-
-export const AuthValidator: MiddlewareFn<ContextType> = (
-	{ context: { request, response, payload } },
-	next
-) => {
-	console.log('I happened');
-	console.log(request.cookies.uid);
-	// const token = ctx.request.cookies.uid;
-
-	// if (!token) {
-	// 	console.log('no token');
-	// }
-
-	// try {
-	// 	const payload = jwt.verify(token, process.env.JWT_SECRET!);
-	// } catch (error) {}
-	// const token = context;
-
-	// console.log(token);
-
-	// if (!token) {
-	// 	throw new Error('you are unauthorized');
-	// }
-
-	// //console.log(token);
-	return next();
 };
