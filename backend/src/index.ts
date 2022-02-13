@@ -7,6 +7,8 @@ import { LoginResolver } from './resolvers/Login';
 import { RegisterResolver } from './resolvers/Register';
 import mongoose from 'mongoose';
 import { LogoutResolver } from './resolvers/Logout';
+import { TestResolver } from './resolvers/TestResolver';
+import cookieParser from 'cookie-parser';
 
 const run = async () => {
 	const PORT = process.env.PORT || 4000;
@@ -24,6 +26,7 @@ const run = async () => {
 			LoginResolver,
 			ConfirmResolver,
 			LogoutResolver,
+			TestResolver,
 		],
 	});
 
@@ -39,6 +42,8 @@ const run = async () => {
 		resolvers,
 		context: ({ response, request }) => ({ response, request }),
 	});
+
+	server.use(cookieParser());
 
 	server.start(options, () =>
 		console.log(`Server started: http://localhost:${PORT}/playground`)
