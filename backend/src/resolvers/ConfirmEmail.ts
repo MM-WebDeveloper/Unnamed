@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import 'dotenv/config';
 
 @ObjectType()
-class ConfirmResponse {
+class ConfirmEmailResponse {
 	@Field(() => Boolean, { nullable: true })
 	success?: boolean;
 	@Field(() => String, { nullable: true })
@@ -17,9 +17,11 @@ class ConfirmResponse {
 }
 
 @Resolver()
-export class ConfirmResolver {
-	@Mutation(() => ConfirmResponse)
-	async confirm(@Arg('token') token: string): Promise<ConfirmResponse> {
+export class ConfirmEmailResolver {
+	@Mutation(() => ConfirmEmailResponse)
+	async confirmEmail(
+		@Arg('token') token: string
+	): Promise<ConfirmEmailResponse> {
 		try {
 			const decodedToken = jwt.verify(
 				token,
@@ -30,10 +32,10 @@ export class ConfirmResolver {
 				confirmed: true,
 			});
 
-			return new ConfirmResponse(true, undefined);
+			return new ConfirmEmailResponse(true, undefined);
 		} catch (error) {
 			console.log(error);
-			return new ConfirmResponse(false, '500 || Internal Server Error');
+			return new ConfirmEmailResponse(false, '500 || Internal Server Error');
 		}
 	}
 }

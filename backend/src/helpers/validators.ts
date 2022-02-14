@@ -1,4 +1,4 @@
-export const EmailValidator = (email: string) => {
+export const emailValidator = (email: string) => {
 	const REGEX_EMAIL = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 	if (!REGEX_EMAIL.test(email)) {
@@ -7,14 +7,14 @@ export const EmailValidator = (email: string) => {
 	return false;
 };
 
-export const UsernameValidator = (username: string) => {
+export const usernameValidator = (username: string) => {
 	if (!username) {
 		return true;
 	}
 	return false;
 };
 
-export const PasswordValidator = (password: string) => {
+export const passwordValidator = (password: string) => {
 	/* 
   One uppercase letter
   One lowercase letter

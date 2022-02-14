@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 import { buildTypeDefsAndResolvers } from 'type-graphql';
-import { ConfirmResolver } from './resolvers/Confirm';
+import { ConfirmEmailResolver } from './resolvers/ConfirmEmail';
 import { GraphQLServer, Options } from 'graphql-yoga';
 import { LoginResolver } from './resolvers/Login';
 import { RegisterResolver } from './resolvers/Register';
@@ -24,7 +24,7 @@ const run = async () => {
 		resolvers: [
 			RegisterResolver,
 			LoginResolver,
-			ConfirmResolver,
+			ConfirmEmailResolver,
 			LogoutResolver,
 			TestResolver,
 		],

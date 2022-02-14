@@ -2,7 +2,7 @@ import { MiddlewareFn } from 'type-graphql';
 import jwt from 'jsonwebtoken';
 import { ContextType } from '../types/ContextType';
 
-export const AuthValidator: MiddlewareFn<ContextType> = async (
+export const authValidator: MiddlewareFn<ContextType> = async (
 	{ context },
 	next
 ) => {
@@ -15,7 +15,7 @@ export const AuthValidator: MiddlewareFn<ContextType> = async (
 	try {
 		const tokenData = jwt.verify(token, process.env.JWT_SECRET!);
 
-		const payload = tokenData as any;
+		const payload = tokenData;
 
 		context.payload = payload as any;
 	} catch (error) {
