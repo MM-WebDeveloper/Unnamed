@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import { LogoutResolver } from './resolvers/Logout';
 import { TestResolver } from './resolvers/TestResolver';
 import cookieParser from 'cookie-parser';
+import { ConfirmTokenResolver } from './resolvers/ConfirmToken';
 
 const run = async () => {
 	const PORT = process.env.PORT || 4000;
@@ -25,6 +26,7 @@ const run = async () => {
 			RegisterResolver,
 			LoginResolver,
 			ConfirmEmailResolver,
+			ConfirmTokenResolver,
 			LogoutResolver,
 			TestResolver,
 		],

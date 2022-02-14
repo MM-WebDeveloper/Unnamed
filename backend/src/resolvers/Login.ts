@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 @ObjectType()
-class User {
+export class User {
 	@Field(() => String)
 	username: string;
 	@Field(() => String)
@@ -20,13 +20,10 @@ class LoginResponse {
 	@Field(() => User, { nullable: true })
 	user?: User;
 	@Field(() => String, { nullable: true })
-	accessToken?: string;
-	@Field(() => String, { nullable: true })
 	error?: string;
 
-	constructor(user?: User, accessToken?: string, error?: string) {
+	constructor(user?: User, error?: string) {
 		this.user = user;
-		this.accessToken = accessToken;
 		this.error = error;
 	}
 }
@@ -45,16 +42,11 @@ export class LoginResolver {
 			});
 
 			if (!user) {
-				return new LoginResponse(
-					undefined,
-					undefined,
-					'Invalid email or password.'
-				);
+				return new LoginResponse(undefined, 'Invalid email or password.');
 			}
 
 			if (!user.confirmed) {
 				return new LoginResponse(
-					undefined,
 					undefined,
 					'You have to confirm your email before you can login.'
 				);
@@ -63,11 +55,7 @@ export class LoginResolver {
 			const validPassword = await bcrypt.compare(password, user.password);
 
 			if (!validPassword) {
-				return new LoginResponse(
-					undefined,
-					undefined,
-					'Invalid email or password.'
-				);
+				return new LoginResponse(undefined, 'Invalid email or password.');
 			}
 
 			const accessToken = jwt.sign(
@@ -84,11 +72,7 @@ export class LoginResolver {
 			);
 		} catch (error) {
 			console.log(error);
-			return new LoginResponse(
-				undefined,
-				undefined,
-				'500 || Internal Server Error'
-			);
+			return new LoginResponse(undefined, '500 || Internal Server Error');
 		}
 	}
 }
