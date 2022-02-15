@@ -14,7 +14,7 @@ const login: React.FC<loginProps> = ({}) => {
 	const [error, setError] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(true);
-	const [updateLoginResult, login] = useLoginMutation();
+	const [loginResult, login] = useLoginMutation();
 	const { state, setState } = useContext(UserContext);
 	const router = useRouter();
 
@@ -33,6 +33,8 @@ const login: React.FC<loginProps> = ({}) => {
 				setError(api_error);
 				return;
 			}
+
+			console.log(data);
 
 			setState({
 				user: data?.login.user!,

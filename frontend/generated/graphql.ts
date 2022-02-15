@@ -15,29 +15,35 @@ export type Scalars = {
   Float: number;
 };
 
-export type ConfirmResponse = {
-  __typename?: 'ConfirmResponse';
+export type ConfirmEmailResponse = {
+  __typename?: 'ConfirmEmailResponse';
   error?: Maybe<Scalars['String']>;
   success?: Maybe<Scalars['Boolean']>;
 };
 
+export type ConfirmTokenResponse = {
+  __typename?: 'ConfirmTokenResponse';
+  error?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
-  accessToken?: Maybe<Scalars['String']>;
   error?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  confirm: ConfirmResponse;
+  confirmEmail: ConfirmEmailResponse;
+  confirmToken: ConfirmTokenResponse;
   login: LoginResponse;
   logout: Scalars['Boolean'];
   register: RegisterResponse;
 };
 
 
-export type MutationConfirmArgs = {
+export type MutationConfirmEmailArgs = {
   token: Scalars['String'];
 };
 
@@ -58,13 +64,7 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
-  user2: Scalars['String'];
-  validateToken: Scalars['Boolean'];
-};
-
-
-export type QueryValidateTokenArgs = {
-  token: Scalars['String'];
+  testRoute: Scalars['String'];
 };
 
 export type RegisterResponse = {
@@ -79,12 +79,12 @@ export type User = {
   username: Scalars['String'];
 };
 
-export type ConfirmMutationVariables = Exact<{
+export type ConfirmEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
 
 
-export type ConfirmMutation = { __typename?: 'Mutation', confirm: { __typename?: 'ConfirmResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
+export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'ConfirmEmailResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -97,7 +97,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken?: string | null | undefined, error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -114,25 +114,18 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', success: boolean, error?: string | null | undefined } };
 
-export type ValidateTokenQueryVariables = Exact<{
-  token: Scalars['String'];
-}>;
 
-
-export type ValidateTokenQuery = { __typename?: 'Query', validateToken: boolean };
-
-
-export const ConfirmDocument = gql`
-    mutation Confirm($token: String!) {
-  confirm(token: $token) {
+export const ConfirmEmailDocument = gql`
+    mutation ConfirmEmail($token: String!) {
+  confirmEmail(token: $token) {
     success
     error
   }
 }
     `;
 
-export function useConfirmMutation() {
-  return Urql.useMutation<ConfirmMutation, ConfirmMutationVariables>(ConfirmDocument);
+export function useConfirmEmailMutation() {
+  return Urql.useMutation<ConfirmEmailMutation, ConfirmEmailMutationVariables>(ConfirmEmailDocument);
 };
 export const HelloDocument = gql`
     query Hello {
@@ -150,7 +143,6 @@ export const LoginDocument = gql`
       username
       email
     }
-    accessToken
     error
   }
 }
@@ -184,13 +176,4 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
-};
-export const ValidateTokenDocument = gql`
-    query ValidateToken($token: String!) {
-  validateToken(token: $token)
-}
-    `;
-
-export function useValidateTokenQuery(options: Omit<Urql.UseQueryArgs<ValidateTokenQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<ValidateTokenQuery>({ query: ValidateTokenDocument, ...options });
 };

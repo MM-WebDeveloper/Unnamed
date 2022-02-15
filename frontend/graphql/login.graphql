@@ -4,7 +4,6 @@ mutation Login($emailOrUsername: String!, $password: String!) {
 			username
 			email
 		}
-		accessToken
 		error
 	}
 }

@@ -1,3 +1,0 @@
-query ValidateToken($token: String!) {
-	validateToken(token: $token)
-}

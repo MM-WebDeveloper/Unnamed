@@ -1,11 +1,10 @@
-import { GetServerSideProps } from 'next';
 import { UserContext } from '../context/index';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { useLogoutMutation } from '../generated/graphql';
-import { NextPage } from 'next';
+import withAuth from '../components/WithAuth';
 
-const dashboard: NextPage = () => {
+const dashboard: React.FC = () => {
 	const { state, setState } = useContext(UserContext);
 	const [updateLogoutResult, logout] = useLogoutMutation();
 	const router = useRouter();
@@ -24,4 +23,4 @@ const dashboard: NextPage = () => {
 	);
 };
 
-export default dashboard;
+export default withAuth(dashboard);

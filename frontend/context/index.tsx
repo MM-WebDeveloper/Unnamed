@@ -1,4 +1,3 @@
-import { stringifyDocument } from '@urql/core/dist/types/utils';
 import React, { useState, createContext } from 'react';
 
 interface UserProviderProps {
