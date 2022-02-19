@@ -5,25 +5,14 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 @ObjectType()
-export class User {
-	@Field(() => String)
-	username: string;
-	@Field(() => String)
-	email: string;
-	constructor(username: string, email: string) {
-		(this.username = username), (this.email = email);
-	}
-}
-
-@ObjectType()
 class LoginResponse {
-	@Field(() => User, { nullable: true })
-	user?: User;
+	@Field(() => Boolean, { nullable: true })
+	success?: Boolean;
 	@Field(() => String, { nullable: true })
 	error?: string;
 
-	constructor(user?: User, error?: string) {
-		this.user = user;
+	constructor(success?: Boolean, error?: string) {
+		this.success = success;
 		this.error = error;
 	}
 }
@@ -66,10 +55,7 @@ export class LoginResolver {
 
 			ctx.response.cookie('uid', accessToken, { httpOnly: true });
 
-			return new LoginResponse(
-				{ username: user.username, email: user.email },
-				accessToken
-			);
+			return new LoginResponse(true, undefined);
 		} catch (error) {
 			console.log(error);
 			return new LoginResponse(undefined, '500 || Internal Server Error');
