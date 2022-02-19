@@ -30,7 +30,7 @@ export type ConfirmTokenResponse = {
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   error?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
+  success?: Maybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
@@ -86,6 +86,11 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'ConfirmEmailResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
+export type ConfirmTokenMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ConfirmTokenMutation = { __typename?: 'Mutation', confirmToken: { __typename?: 'ConfirmTokenResponse', error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -97,7 +102,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -127,6 +132,21 @@ export const ConfirmEmailDocument = gql`
 export function useConfirmEmailMutation() {
   return Urql.useMutation<ConfirmEmailMutation, ConfirmEmailMutationVariables>(ConfirmEmailDocument);
 };
+export const ConfirmTokenDocument = gql`
+    mutation ConfirmToken {
+  confirmToken {
+    user {
+      username
+      email
+    }
+    error
+  }
+}
+    `;
+
+export function useConfirmTokenMutation() {
+  return Urql.useMutation<ConfirmTokenMutation, ConfirmTokenMutationVariables>(ConfirmTokenDocument);
+};
 export const HelloDocument = gql`
     query Hello {
   hello
@@ -139,10 +159,7 @@ export function useHelloQuery(options: Omit<Urql.UseQueryArgs<HelloQueryVariable
 export const LoginDocument = gql`
     mutation Login($emailOrUsername: String!, $password: String!) {
   login(emailOrUsername: $emailOrUsername, password: $password) {
-    user {
-      username
-      email
-    }
+    success
     error
   }
 }

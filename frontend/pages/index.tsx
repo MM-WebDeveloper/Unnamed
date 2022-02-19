@@ -34,12 +34,6 @@ const login: React.FC<loginProps> = ({}) => {
 				return;
 			}
 
-			console.log(data);
-
-			setState({
-				user: data?.login.user!,
-			});
-
 			router.push('/dashboard');
 		} catch (error) {
 			console.log(error);

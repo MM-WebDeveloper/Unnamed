@@ -1,4 +1,4 @@
-import { useConfirmMutation } from '../../generated/graphql';
+import { useConfirmEmailMutation } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -6,17 +6,13 @@ import styles from '../../styles/Confirm.module.css';
 
 interface confirmProps {}
 const confirm: React.FC<confirmProps> = () => {
-	const [updateConfirmResult, confirm] = useConfirmMutation();
+	const [updateConfirmResult, confirm] = useConfirmEmailMutation();
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 	let { id } = router.query;
 
 	useEffect(() => {
-		console.log(1);
-		console.log(id as string);
-		console.log(2);
 		const confirmEmail = async () => {
-			console.log(3);
 			if (!router.isReady) return;
 			await confirm({ token: id as string });
 			setLoading(true);

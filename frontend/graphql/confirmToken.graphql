@@ -1,0 +1,9 @@
+mutation ConfirmToken {
+	confirmToken {
+		user {
+			username
+			email
+		}
+		error
+	}
+}

@@ -14,6 +14,8 @@ const dashboard: React.FC = () => {
 		router.push('/');
 	};
 
+	console.log(2);
+
 	return (
 		<div>
 			<h1>Dashboard Page</h1>
