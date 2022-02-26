@@ -1,9 +1,6 @@
-mutation ConfirmToken {
+query ConfirmToken {
 	confirmToken {
-		user {
-			username
-			email
-		}
+		valid
 		error
 	}
 }

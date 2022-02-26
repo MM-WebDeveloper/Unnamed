@@ -24,19 +24,18 @@ export type ConfirmEmailResponse = {
 export type ConfirmTokenResponse = {
   __typename?: 'ConfirmTokenResponse';
   error?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
+  valid?: Maybe<Scalars['Boolean']>;
 };
 
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   error?: Maybe<Scalars['String']>;
-  success?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<User>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   confirmEmail: ConfirmEmailResponse;
-  confirmToken: ConfirmTokenResponse;
   login: LoginResponse;
   logout: Scalars['Boolean'];
   register: RegisterResponse;
@@ -63,6 +62,7 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  confirmToken: ConfirmTokenResponse;
   hello: Scalars['String'];
   testRoute: Scalars['String'];
 };
@@ -86,10 +86,10 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'ConfirmEmailResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
-export type ConfirmTokenMutationVariables = Exact<{ [key: string]: never; }>;
+export type ConfirmTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfirmTokenMutation = { __typename?: 'Mutation', confirmToken: { __typename?: 'ConfirmTokenResponse', error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
+export type ConfirmTokenQuery = { __typename?: 'Query', confirmToken: { __typename?: 'ConfirmTokenResponse', valid?: boolean | null | undefined, error?: string | null | undefined } };
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -102,7 +102,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', error?: string | null | undefined, user?: { __typename?: 'User', username: string, email: string } | null | undefined } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -133,19 +133,16 @@ export function useConfirmEmailMutation() {
   return Urql.useMutation<ConfirmEmailMutation, ConfirmEmailMutationVariables>(ConfirmEmailDocument);
 };
 export const ConfirmTokenDocument = gql`
-    mutation ConfirmToken {
+    query ConfirmToken {
   confirmToken {
-    user {
-      username
-      email
-    }
+    valid
     error
   }
 }
     `;
 
-export function useConfirmTokenMutation() {
-  return Urql.useMutation<ConfirmTokenMutation, ConfirmTokenMutationVariables>(ConfirmTokenDocument);
+export function useConfirmTokenQuery(options: Omit<Urql.UseQueryArgs<ConfirmTokenQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ConfirmTokenQuery>({ query: ConfirmTokenDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {
@@ -159,7 +156,10 @@ export function useHelloQuery(options: Omit<Urql.UseQueryArgs<HelloQueryVariable
 export const LoginDocument = gql`
     mutation Login($emailOrUsername: String!, $password: String!) {
   login(emailOrUsername: $emailOrUsername, password: $password) {
-    success
+    user {
+      username
+      email
+    }
     error
   }
 }

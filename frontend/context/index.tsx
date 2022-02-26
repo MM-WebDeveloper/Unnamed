@@ -1,15 +1,18 @@
-import React, { useState, createContext } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 interface UserProviderProps {
 	children: React.ReactElement | React.ReactElement[];
 }
 
-const UserContextDefaultValue = {
-	state: { user: { email: '', username: '' } },
-	setState: (state: { user: { email: string; username: string } }) => {},
+const userContextDefaultValue = {
+	state: { user: { email: '', username: '' }, loggedIn: false },
+	setState: (state: {
+		user: { email: string; username: string };
+		loggedIn: boolean;
+	}) => {},
 };
 
-const UserContext = createContext(UserContextDefaultValue);
+const UserContext = createContext(userContextDefaultValue);
 
 const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 	const [state, setState] = useState({
@@ -17,7 +20,15 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 			email: '',
 			username: '',
 		},
+		loggedIn: false,
 	});
+
+	useEffect(() => {
+		setState({
+			user: JSON.parse(window.localStorage.getItem('user')!),
+			loggedIn: true,
+		});
+	}, []);
 
 	return (
 		<UserContext.Provider value={{ state, setState }}>

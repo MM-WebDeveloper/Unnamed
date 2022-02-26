@@ -1,11 +1,12 @@
 import { faCameraRetro, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLoginMutation } from '../generated/graphql';
-import { UserContext } from '../context/index';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../context';
 import { GetServerSideProps } from 'next';
+import jwt from 'jsonwebtoken';
 
 interface loginProps {}
 
@@ -16,6 +17,7 @@ const login: React.FC<loginProps> = ({}) => {
 	const [showPassword, setShowPassword] = useState(true);
 	const [loginResult, login] = useLoginMutation();
 	const { state, setState } = useContext(UserContext);
+
 	const router = useRouter();
 
 	const onSubmitHandler = async (e: React.FormEvent) => {
@@ -33,6 +35,10 @@ const login: React.FC<loginProps> = ({}) => {
 				setError(api_error);
 				return;
 			}
+
+			setState({ user: data?.login.user!, loggedIn: true });
+
+			window.localStorage.setItem('user', JSON.stringify(data?.login.user));
 
 			router.push('/dashboard');
 		} catch (error) {
@@ -101,6 +107,29 @@ const login: React.FC<loginProps> = ({}) => {
 			<div className={'waves'} />
 		</>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const cookie = context.req.cookies['uid'];
+
+		const decoded = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET!);
+
+		if (decoded) {
+			return {
+				redirect: {
+					permanent: false,
+					destination: '/dashboard',
+				},
+				props: {},
+			};
+		}
+	} catch (error) {
+		console.log(error);
+	}
+	return {
+		props: {},
+	};
 };
 
 export default login;
