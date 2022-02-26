@@ -86,11 +86,6 @@ export type ConfirmEmailMutationVariables = Exact<{
 
 export type ConfirmEmailMutation = { __typename?: 'Mutation', confirmEmail: { __typename?: 'ConfirmEmailResponse', success?: boolean | null | undefined, error?: string | null | undefined } };
 
-export type ConfirmTokenQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ConfirmTokenQuery = { __typename?: 'Query', confirmToken: { __typename?: 'ConfirmTokenResponse', valid?: boolean | null | undefined, error?: string | null | undefined } };
-
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -131,18 +126,6 @@ export const ConfirmEmailDocument = gql`
 
 export function useConfirmEmailMutation() {
   return Urql.useMutation<ConfirmEmailMutation, ConfirmEmailMutationVariables>(ConfirmEmailDocument);
-};
-export const ConfirmTokenDocument = gql`
-    query ConfirmToken {
-  confirmToken {
-    valid
-    error
-  }
-}
-    `;
-
-export function useConfirmTokenQuery(options: Omit<Urql.UseQueryArgs<ConfirmTokenQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<ConfirmTokenQuery>({ query: ConfirmTokenDocument, ...options });
 };
 export const HelloDocument = gql`
     query Hello {

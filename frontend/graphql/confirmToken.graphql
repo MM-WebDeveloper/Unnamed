@@ -1,6 +1,0 @@
-query ConfirmToken {
-	confirmToken {
-		valid
-		error
-	}
-}

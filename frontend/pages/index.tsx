@@ -113,7 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	try {
 		const cookie = context.req.cookies['uid'];
 
-		const decoded = jwt.verify(cookie, process.env.NEXT_PUBLIC_JWT_SECRET!);
+		const decoded = jwt.verify(cookie, process.env.PRIVATE_JWT_SECRET!);
 
 		if (decoded) {
 			return {
